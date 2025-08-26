@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loteria</title>
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon for most browsers -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/appstore.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/playstore.png">
+
+  <!-- Optional Apple touch icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/appstore.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #e9ecef; /* page background */
+    }
+
+    /* Outer container with black border */
+    .container {
+      border: 3px solid black; /* outer border */
+      padding: 10px;
+      background: #f9f9f9;
+      max-width: 90vw;
+      display: flex;
+      justify-content: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); /* 4x4 grid */
+      gap: 12px;
+      width: 100%;
+    }
+
+    .card {
+      border: 2px solid transparent;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      background: white;
+      transition: border 0.2s ease;
+    }
+
+    .card.selected {
+      border: 5px solid #007BFF; /* blue border when selected */
+    }
+
+    .card img {
+      width: 100%;
+      display: block;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <script>
+    const totalImages = 16;
+    const numbers = Array.from({ length: totalImages }, (_, i) => i + 1);
+    const container = document.getElementById("container");
+    const grid = document.getElementById("grid");
+
+    // Shuffle images
+    for (let i = numbers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+    }
+
+    numbers.forEach(num => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      const img = document.createElement("img");
+      img.src = `cards/${num}.jpg`;
+      img.alt = `Card ${num}`;
+
+      card.appendChild(img);
+      grid.appendChild(card);
+
+      // Toggle selection
+      card.addEventListener("click", () => {
+        card.classList.toggle("selected");
+        checkAllSelected();
+      });
+    });
+
+      const body = document.body; // reference to body
+
+    // Check if all cards are selected
+    function checkAllSelected() {
+      const allSelected = document.querySelectorAll(".card.selected").length === totalImages;
+        body.style.backgroundColor = allSelected ? "red" : "#e9ecef";
+    }
+  </script>
+</body>
+</html>
